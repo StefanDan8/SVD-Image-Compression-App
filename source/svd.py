@@ -1,6 +1,6 @@
-import matplotlib.pyplot as plt
+from itertools import repeat
+from multiprocessing import Pool
 import numpy as np
-import os
 
 
 class RGBSVD:
@@ -16,7 +16,7 @@ class RGBSVD:
         self.G_SVD.update_approx(k)
         self.B_SVD.update_approx(k)
         approx = np.dstack([self.R_SVD.approx, self.G_SVD.approx, self.B_SVD.approx])
-        return np.around(approx).astype(np.uint8)
+        return np.around(approx).astype(int)
 
 
 class SVD:
@@ -49,13 +49,23 @@ def rank_approximation(U, S, Vh, k):
 
 def rsvd_image_approximation(img, k, n_iter = 1, p = 5):
     R, G, B = img[:, :, 0], img[:, :, 1], img[:, :, 2]
-    Ur, Sr, Vhr = randomized_SVD(R, k, n_iter, p)
-    Ug, Sg, Vhg = randomized_SVD(G, k, n_iter, p)
-    Ub, Sb, Vhb = randomized_SVD(B, k, n_iter, p)
-    new_R = rank_approximation(Ur, Sr, Vhr, k)
-    new_G = rank_approximation(Ug, Sg, Vhg, k)
-    new_B = rank_approximation(Ub, Sb, Vhb, k)
+    new_R = rank_approximation(*randomized_SVD(R, k, n_iter, p), k)
+    new_G = rank_approximation(*randomized_SVD(G, k, n_iter, p), k)
+    new_B = rank_approximation(*randomized_SVD(B, k, n_iter, p), k)
     return np.dstack([new_R, new_G, new_B])
+
+
+def approx(X, k, n_iter, p):
+    return rank_approximation(*randomized_SVD(X, k, n_iter, p), k)
+
+
+def rsvd_image_approx_parallel(img, k, n_iter = 1, p = 5):
+    R, G, B = img[:, :, 0], img[:, :, 1], img[:, :, 2]
+
+    with Pool() as pool:
+        result = pool.starmap(approx, zip([R, G, B], repeat(k), repeat(n_iter), repeat(p)))
+
+    return np.dstack(result)
 
 
 def randomized_SVD(X, rank, n_iter, p):
@@ -86,25 +96,3 @@ def randomized_SVD(X, rank, n_iter, p):
     UY, S, Vh = np.linalg.svd(Y, full_matrices = False)
     U = Q @ UY
     return U, S, Vh
-
-
-if __name__ == "__main__":
-    img = plt.imread(os.path.join('resources', 'jupiter.jpg'))  # returns (M,N,3) numpy array in [0,1] if .png, else int
-    # array in [0,255]
-    R, G, B = img[:, :, 0], img[:, :, 1], img[:, :, 2]
-    k = 150
-    Ur, Sr, Vhr = randomized_SVD(R, k, 1, 5)
-    Ug, Sg, Vhg = randomized_SVD(G, k, 1, 5)
-    Ub, Sb, Vhb = randomized_SVD(B, k, 1, 5)
-
-    new_R = Ur[:, :k] @ np.diag(Sr[:k]) @ Vhr[:k, :]
-    new_G = Ug[:, : k] @ np.diag(Sg[:k]) @ Vhg[:k, :]
-    new_B = Ub[:, : k] @ np.diag(Sb[:k]) @ Vhb[:k, :]
-    # SVDR = SVD(R)
-    # SVDG = SVD(G)
-    # SVDB = SVD(B)
-    # new_image = np.dstack([SVDR.rank_approx(k), SVDG.rank_approx(k), SVDB.rank_approx(k)])
-    # print(SVDR.approx - R)
-    new_image_r = np.dstack([new_R, new_G, new_B])
-    plt.imshow(np.around(new_image_r).astype(int))  # be sure to put it in [0,255] range
-    plt.show()
