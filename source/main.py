@@ -23,8 +23,6 @@ class App(tk2.Tk):
 def resource_path(relative_path):
     """
     For PyInstaller. Thanks to Rainer Niemann for the solution regarding accessing images.
-    :param relative_path:
-    :return:
     """
     try:
         base_path = sys._MEIPASS
