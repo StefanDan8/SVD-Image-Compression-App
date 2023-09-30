@@ -7,16 +7,16 @@ class SliderWidget(tk.Frame):
         self.display_widget = display_widget
         self.info_widget = info_widget
         self.to = to
-        self.slider = tk.Scale(self, from_ = 1, to = self.to, tickinterval = to // 20, orient = tk.HORIZONTAL,
+        self.slider = tk.Scale(self, from_ = 1, to = self.to, tickinterval = to//25, orient = tk.HORIZONTAL,
                                width = 10)
         self.slider.bind("<ButtonRelease-1>", self._update)
         self.slider.pack(expand = True, fill = tk.X)
         display_widget.set_slider(self.slider)
+        self.configure(padx = 10, pady = 10, relief = 'sunken', borderwidth = 3)
 
     def _update(self, event):
-        print(self.slider.get())
-        self.display_widget.do_update(self.slider.get())
         self.info_widget.do_update(self.slider.get())
+        self.display_widget.do_update(self.slider.get())
 
     def set_info_widget(self, info_widget):
         self.info_widget = info_widget
