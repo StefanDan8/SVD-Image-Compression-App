@@ -38,10 +38,3 @@ class HalfSplitFrame(tk.Frame):
 
         pad_frame.bind("<Configure>", enforce_aspect_ratio)
 
-
-if __name__ == '__main__':
-    root = tk.Tk()
-    window = HalfSplitFrame(root)
-    root.geometry('500x500')
-    window.pack(fill = tk.BOTH, expand = True)
-    root.mainloop()
