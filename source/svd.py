@@ -11,12 +11,15 @@ class RGBSVD:
         self.G_SVD = SVD(image_tensor[:, :, 1])
         self.B_SVD = SVD(image_tensor[:, :, 2])
 
-    def get_rank_k_approximation(self, k):
+    def get_rank_k_approximation(self, k, png):
         self.R_SVD.update_approx(k)
         self.G_SVD.update_approx(k)
         self.B_SVD.update_approx(k)
         approx = np.dstack([self.R_SVD.approx, self.G_SVD.approx, self.B_SVD.approx])
-        return np.around(approx).astype(int)
+        if png:
+            return np.clip(approx, a_min = 0, a_max = 1)  # it's already float
+        else:
+            return np.clip(approx, a_min = 0, a_max = 255).astype(int)
 
 
 class SVD:
@@ -47,12 +50,15 @@ def rank_approximation(U, S, Vh, k):
     return U[:, :k] @ np.diag(S[:k]) @ Vh[:k, :]
 
 
-def rsvd_image_approximation(img, k, n_iter = 1, p = 5):
+def rsvd_image_approximation(img, k, png, n_iter = 1, p = 5):
     R, G, B = img[:, :, 0], img[:, :, 1], img[:, :, 2]
     new_R = rank_approximation(*randomized_SVD(R, k, n_iter, p), k)
     new_G = rank_approximation(*randomized_SVD(G, k, n_iter, p), k)
     new_B = rank_approximation(*randomized_SVD(B, k, n_iter, p), k)
-    return np.dstack([new_R, new_G, new_B])
+    if png:
+        return np.clip(np.dstack([new_R, new_G, new_B]), a_min = 0, a_max = 1)  # it's already float
+    else:
+        return np.clip(np.dstack([new_R, new_G, new_B]), a_min = 0, a_max = 255).astype(int)
 
 
 def approx(X, k, n_iter, p):
