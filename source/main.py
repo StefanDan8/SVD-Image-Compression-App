@@ -10,14 +10,13 @@ from matplotlib_widget import MatplotlibWidget
 from info_widget import InfoWidget
 import os
 
-# Commands for PyInstaller
-# pyinstaller --noconfirm --onefile --windowed --add-data "C:\Users\40767\Desktop\Holiday Python\Programming\for GitHub\imageCompression\venv\Lib\site-packages\tkinterdnd2;tkinterdnd2/" main.py
-# pyinstaller --noconfirm --onefile --windowed --add-data "C:\Users\40767\Desktop\Holiday Python\Programming\for GitHub\imageCompression\venv\Lib\site-packages\tkinterdnd2;tkinterdnd2/" --add-data "Capybara (225x225).jpg;." --add-data "Bran Castle (1920x1080).jpg;." --add-data "Giraffes (275x183).jpg;." --add-data "Jupiter (2260x3207).jpg;." --add-data "Mandelbrot Set (2560x1920).jpg;." --add-data "Palatul Culturii, Iași (1260x580).jpg;." --add-data "Skyrim Landscape (1920x1080).jpg;." --add-data "Squirrel (2706x1804).jpg;." --add-data "Stefan Dan (2448x3264).jpg;." --add-data "Wanderer above the Sea of Fog (2140x2699).jpg;." main.py
+
 class App(tk2.Tk):
     def __init__(self):
         super().__init__()
         self.title('SVD-Based Image Compression')
-        self.geometry('1400x750')
+        self.geometry('1400x750+20+20')
+        self.iconbitmap(resource_path('resources/icon.ico'))
 
 
 def resource_path(relative_path):

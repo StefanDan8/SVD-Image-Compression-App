@@ -44,7 +44,6 @@ class ImageSampleWidget(ScrollableFrame):
                                           (drop_image_widget.drop_path(resource_path(f'resources/{p}.jpg'))),
                                           bg = 'white',
                                           anchor = tk.W))
-            # TODO move images and remove resources when compiling binaries.
 
         for button in self.buttons:
             button.pack(anchor = tk.W, fill = tk.BOTH, expand = True)
