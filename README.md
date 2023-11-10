@@ -25,14 +25,14 @@ user interface.
 
 Initial state
 
-![alt text](resources/Demo Images/Initial.png)
+![](resources/Demo_Images/Initial.png)
 
 Drop an image in the top-left field or write the path.
 A 50-rank approximation of the image will be computed very
 quickly and displayed, while the true SVD will be computed
 in the background.
 
-![alt text](resources/Demo Images/rsvd.png)
+![](resources/Demo_Images/rsvd.png)
 
 The slider at the bottom will be updated, with values from 1 to 
 the maximal possible rank that a channel of the image can have
@@ -42,7 +42,7 @@ pixels, current rank approximation, compression ratio etc.)
 is displayed, as well as a status whether the SVD is still
 being calculated.
 
-![alt text](resources/Demo Images/computed.png)
+![](resources/Demo_Images/computed.png)
 
 The SVD has been computed. The singular values, colored 
 for each channel (red, green, blue), are plotted on
@@ -52,12 +52,12 @@ One can move the slider to obtain other rank approximations
 i.e. to increase or decrease the compression ratio.
 At rank 50, for this image, it is 13.8194.
 
-![alt text](resources/Demo Images/rank6.png)
+![](resources/Demo_Images/rank6.png)
 
 This is for rank 6. A compression ratio of over 100, yet
 the image is still recognizable.
 
-![alt text](resources/Demo Images/rank217.png)
+![](resources/Demo_Images/rank217.png)
 
 And this is for rank 217. Still a compression by a factor 
 of 3, but the compressed image can barely be distinguished
@@ -71,7 +71,7 @@ images, which can be selected from the bottom-right panel.
 
 For example, one of them is a beautiful landmark from my hometown.
 
-![alt text](resources/Demo Images/iasi.png)
+![](resources/Demo_Images/iasi.png)
 
 If the image is quite big, the computation might take a 
 while, as computing the SVD is $O(m^2n+n^3)$, where $m$ and 
@@ -79,7 +79,7 @@ $n$ are the dimensions of the image.
 In this case, a small note will appear, while the computation
 still runs in the background.
 
-![alt text](resources/Demo Images/warning.png)
+![](resources/Demo_Images/warning.png)
 
 The user interface layout was inspired by this 
 beautiful website http://timbaumann.info/svd-image-compression-demo/.
